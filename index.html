@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI프롬프트 어디까지 해봤니</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <div class="brand-row">
+          <div class="brand">
+            <span class="brand-mark" aria-hidden="true">P</span>
+            <div>
+              <h1>AI프롬프트 어디까지 해봤니</h1>
+              <p>질문을 잘 쓰는 힘을 단계별로 연습해요</p>
+            </div>
+          </div>
+          <button class="ghost-button" id="resetButton" type="button">처음부터</button>
+        </div>
+
+        <section class="mission-status" aria-label="현재 학습 상태">
+          <div>
+            <span class="eyebrow" id="stageEyebrow">튜토리얼</span>
+            <h2 id="stageTitle">AI프롬프트 어디까지 해봤니</h2>
+          </div>
+          <div class="score-strip">
+            <div>
+              <span>총점</span>
+              <strong id="totalScore">0</strong>
+            </div>
+            <div>
+              <span>완료</span>
+              <strong id="completedCount">0/4</strong>
+            </div>
+          </div>
+        </section>
+
+        <nav class="roadmap" id="progressList" aria-label="단계 선택"></nav>
+      </header>
+
+      <section class="workspace" id="workspace" aria-live="polite"></section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
