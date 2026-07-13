@@ -41,7 +41,7 @@ const steps = [
     badge: "연습",
     guide: "아래 질문은 너무 짧아서 AI가 어떤 답을 해야 할지 헷갈릴 수 있어요.",
     prompt: "역사 알려줘.",
-    placeholder: "예: 초등학생에게 조선 시대의 특징을 쉬운 말로 목록으로 설명해줘.",
+    placeholder: "여기에 더 좋은 질문을 직접 만들어 보세요.",
     checks: [
       { id: "topic", label: "알고 싶은 주제가 들어갔나요?", pattern: /역사|조선|고려|삼국|인물|사건|시대|문화/ },
       { id: "audience", label: "누가 읽을 답인지 들어갔나요?", pattern: /초등|중학|고등|학생|어린이|친구|수준|쉬운/ },
@@ -58,7 +58,7 @@ const steps = [
     badge: "기초",
     guide: "빈칸에 알고 싶은 주제를 구체적으로 써보세요.",
     prompt: "초등학교 5학년에게 (        )을 쉬운 말로 설명해줘.",
-    placeholder: "예: 물의 순환 과정",
+    placeholder: "빈칸에 들어갈 주제를 직접 써 보세요.",
     checks: [
       { id: "topic", label: "구체적인 주제인가요?", pattern: /이유|과정|방법|차이|원리|특징|문제|해결|순환|화산|전기|우주|역사|환경/ },
       { id: "length", label: "너무 짧지 않나요?", test: (text) => text.trim().length >= 5 },
@@ -74,7 +74,7 @@ const steps = [
     badge: "보통",
     guide: "AI가 답을 어느 정도로, 어떤 방식으로 써야 하는지 조건을 붙여보세요.",
     prompt: "중학생 발표 준비를 위해 태양계 행성을 설명해줘. 조건: (        )",
-    placeholder: "예: 행성마다 특징을 2개씩 쉬운 말로 정리해줘.",
+    placeholder: "원하는 조건을 내 생각으로 써 보세요.",
     checks: [
       { id: "number", label: "개수나 길이 조건이 있나요?", pattern: /\d|한|두|세|네|다섯|가지|문장|분/ },
       { id: "level", label: "난이도나 대상이 있나요?", pattern: /중학생|쉬운|어려운|수준|발표|이해/ },
@@ -91,7 +91,7 @@ const steps = [
     badge: "도전",
     guide: "AI가 어떤 역할로 답하면 좋을지, 결과가 어떤 모양이면 좋을지 써보세요.",
     prompt: "기후 변화 토론을 준비하려고 해. (        )",
-    placeholder: "예: 너는 토론 코치야. 찬성/반대 근거를 표로 정리해줘.",
+    placeholder: "역할과 답변 모양을 직접 정해 보세요.",
     checks: [
       { id: "role", label: "AI 역할이 있나요?", pattern: /너는|역할|코치|선생님|전문가|멘토|기자/ },
       { id: "topic", label: "해야 할 일이 분명한가요?", pattern: /근거|찬성|반대|토론|질문|반박|정리/ },
@@ -108,7 +108,7 @@ const steps = [
     badge: "심화",
     guide: "목표, 조건, 형식을 함께 넣어 조금 더 완성된 프롬프트를 만들어보세요.",
     prompt: "인공지능 윤리 보고서를 준비하려고 해. (        )",
-    placeholder: "예: 목차를 만들고, 각 목차마다 핵심 질문을 붙여줘.",
+    placeholder: "필요한 내용을 생각해 완성해 보세요.",
     checks: [
       { id: "goal", label: "보고서에서 할 일이 있나요?", pattern: /목차|주제|질문|근거|자료|사례|정리/ },
       { id: "condition", label: "조건이나 기준이 있나요?", pattern: /균형|찬반|고등학생|쉬운|핵심|3|4|5|가지/ },
