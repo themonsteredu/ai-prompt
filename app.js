@@ -1,3 +1,32 @@
+const warmupQuestions = [
+  {
+    question: "AI에게 원하는 답을 받기 좋은 방법은 무엇일까요?",
+    choices: [
+      "질문을 최대한 짧게 쓴다.",
+      "무엇을, 누구에게, 어떤 모양으로 답할지 알려준다.",
+      "어려운 단어를 많이 사용한다.",
+    ],
+    answerIndex: 1,
+    explanation: "주제, 대상, 답변 모양 같은 단서가 있으면 AI가 원하는 답을 더 정확히 만들 수 있어요.",
+  },
+  {
+    question: "'태양계 설명해줘'를 더 좋은 프롬프트로 바꾸려면 무엇을 더하면 좋을까요?",
+    choices: [
+      "누가 읽을지와 어떤 내용이 필요한지",
+      "느낌표를 여러 개",
+      "AI에게 무조건 잘하라고 하는 말",
+    ],
+    answerIndex: 0,
+    explanation: "읽는 사람과 필요한 내용을 알려주면 설명의 난이도와 범위가 분명해져요.",
+  },
+  {
+    question: "'표로 정리해줘'는 프롬프트의 어떤 부분일까요?",
+    choices: ["역할", "주제", "답변 형식"],
+    answerIndex: 2,
+    explanation: "표, 목록, 단계, 대본처럼 결과의 모양을 정하는 말은 답변 형식이에요.",
+  },
+];
+
 const steps = [
   {
     id: "intro",
@@ -120,6 +149,10 @@ const steps = [
 ];
 
 const state = {
+  mode: "warmup",
+  warmupIndex: 0,
+  warmupAnswers: {},
+  warmupSelected: null,
   stepIndex: 0,
   scores: {},
   attempts: {},
@@ -136,12 +169,98 @@ const scoreText = document.querySelector("#scoreText");
 const resetButton = document.querySelector("#resetButton");
 
 function render() {
+  if (state.mode === "warmup") {
+    renderWarmup();
+    return;
+  }
+
   const step = steps[state.stepIndex];
+  stepTabs.hidden = false;
   stageLabel.textContent = `${state.stepIndex + 1}/${steps.length} · ${step.badge}`;
   stageTitle.textContent = step.title;
   scoreText.textContent = `${totalScore()}점`;
   renderTabs();
   renderCard(step);
+}
+
+function renderWarmup() {
+  const quiz = warmupQuestions[state.warmupIndex];
+  const answered = Object.hasOwn(state.warmupAnswers, state.warmupIndex);
+  const isCorrect = answered && state.warmupAnswers[state.warmupIndex] === quiz.answerIndex;
+  const isLast = state.warmupIndex === warmupQuestions.length - 1;
+
+  stepTabs.hidden = true;
+  stageLabel.textContent = `준비 퀴즈 ${state.warmupIndex + 1}/${warmupQuestions.length}`;
+  stageTitle.textContent = "좋은 프롬프트의 비밀 찾기";
+  scoreText.textContent = `${warmupCorrectCount()}/${warmupQuestions.length} 정답`;
+
+  card.innerHTML = `
+    <div class="card-top">
+      <div>
+        <span class="badge">시작 전 몸풀기</span>
+        <h2>프롬프트 탐정 퀴즈</h2>
+      </div>
+      <p class="small">정답을 고르면 바로 이유를 알려드려요.</p>
+    </div>
+
+    <div class="quiz-progress" aria-label="준비 퀴즈 진행률">
+      <span style="width: ${((state.warmupIndex + 1) / warmupQuestions.length) * 100}%"></span>
+    </div>
+    <h3 class="quiz-question">${quiz.question}</h3>
+    <div class="choice-list">
+      ${quiz.choices
+        .map(
+          (choice, index) => `
+            <button class="choice-button ${state.warmupSelected === index ? "selected" : ""}" type="button" data-warmup-choice="${index}" ${answered ? "disabled" : ""}>
+              ${choice}
+            </button>
+          `
+        )
+        .join("")}
+    </div>
+
+    ${
+      answered
+        ? `<div class="feedback ${isCorrect ? "good" : "mid"}">
+            <strong>${isCorrect ? "정답이에요" : "괜찮아요, 여기서 배워가면 돼요"}</strong>
+            <p>${isCorrect ? quiz.explanation : `정답은 “${quiz.choices[quiz.answerIndex]}”예요. ${quiz.explanation}`}</p>
+          </div>
+          <div class="button-row">
+            <button class="primary-button" id="warmupNextButton" type="button">${isLast ? "튜토리얼 시작하기" : "다음 퀴즈"}</button>
+          </div>`
+        : ""
+    }
+  `;
+
+  card.querySelectorAll("[data-warmup-choice]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const selected = Number(button.dataset.warmupChoice);
+      state.warmupSelected = selected;
+      state.warmupAnswers[state.warmupIndex] = selected;
+      render();
+    });
+  });
+
+  const nextButton = document.querySelector("#warmupNextButton");
+  if (nextButton) {
+    nextButton.addEventListener("click", () => {
+      if (isLast) {
+        state.mode = "tutorial";
+        state.stepIndex = 0;
+        clearInteraction();
+      } else {
+        state.warmupIndex += 1;
+        state.warmupSelected = null;
+      }
+      render();
+    });
+  }
+}
+
+function warmupCorrectCount() {
+  return Object.entries(state.warmupAnswers).filter(
+    ([index, answer]) => warmupQuestions[Number(index)].answerIndex === answer
+  ).length;
 }
 
 function renderTabs() {
@@ -379,6 +498,10 @@ function clearInteraction() {
 }
 
 function resetAll() {
+  state.mode = "warmup";
+  state.warmupIndex = 0;
+  state.warmupAnswers = {};
+  state.warmupSelected = null;
   state.stepIndex = 0;
   state.scores = {};
   state.attempts = {};

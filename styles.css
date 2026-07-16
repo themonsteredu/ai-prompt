@@ -227,6 +227,31 @@ h1 {
   background: #eef4ff;
 }
 
+.choice-button:disabled {
+  cursor: default;
+}
+
+.quiz-progress {
+  height: 8px;
+  margin: 4px 0 20px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #e8edf3;
+}
+
+.quiz-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--green);
+  transition: width 180ms ease;
+}
+
+.quiz-question {
+  font-size: 19px;
+  line-height: 1.5;
+}
+
 .answer-area {
   display: grid;
   gap: 8px;
